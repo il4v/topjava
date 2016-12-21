@@ -1,6 +1,7 @@
-<%@ page import="ru.javawebinar.topjava.model.MealWithExceed" %>
-<%@ page import="java.util.List" %>
-<%@ page import="ru.javawebinar.topjava.util.TimeUtil" %><%--
+<%@ page import="ru.javawebinar.topjava.util.TimeUtil" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%--
   Created by IntelliJ IDEA.
   User: USER
   Date: 15.12.2016
@@ -24,20 +25,22 @@
 </head>
 <body>
 <h2>Meal List</h2>
-<table border="1">
-    <%
-        List<MealWithExceed> meals = (List<MealWithExceed>) request.getAttribute("meals");
-        for (MealWithExceed meal : meals) {
-    %>
-    <tr class=<%=meal.isExceed() ? "normal" : "exceeded"%>>
-        <td><%=meal.getDateTime().format(TimeUtil.DATE_TIME_FORMATTER)%>
-        </td>
-        <td><%=meal.getDescription()%>
-        </td>
-        <td><%=meal.getCalories()%>
-        </td>
-    </tr>
-    <% } %>
+<table border="1" cellpadding="8" cellspacing="0">
+    <thread>
+        <tr>
+            <th>Date</th>
+            <th>Description</th>
+            <th>Calories</th>
+        </tr>
+    </thread>
+    <c:forEach items="${meals}" var="meal">
+        <jsp:useBean id="meal" scope="page" type="ru.javawebinar.topjava.model.MealWithExceed"/>
+        <tr class="${meal.exceed ? 'exceeded' : 'normal'}">
+            <td><%=meal.getDateTime().format(TimeUtil.DATE_TIME_FORMATTER)%></td>
+            <td>${meal.description}</td>
+            <td>${meal.calories}</td>
+        </tr>
+    </c:forEach>
 </table>
 </body>
 </html>
